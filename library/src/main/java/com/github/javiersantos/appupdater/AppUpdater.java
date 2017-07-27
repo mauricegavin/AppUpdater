@@ -26,6 +26,7 @@ public class AppUpdater implements IAppUpdater {
     private Duration duration;
     private GitHub gitHub;
     private String xmlOrJsonUrl;
+    private String customPackageName;
     private Integer showEvery;
     private Boolean showAppUpdated;
     private String titleUpdate, descriptionUpdate, btnDismiss, btnUpdate, btnDisable; // Update available
@@ -88,6 +89,12 @@ public class AppUpdater implements IAppUpdater {
     @Override
     public AppUpdater setUpdateJSON(@NonNull String jsonUrl) {
         this.xmlOrJsonUrl = jsonUrl;
+        return this;
+    }
+
+    @Override
+    public AppUpdater setCustomPackageName(@NonNull String packageName) {
+        this.customPackageName = packageName;
         return this;
     }
 
@@ -318,7 +325,7 @@ public class AppUpdater implements IAppUpdater {
 
     @Override
     public void start() {
-        latestAppVersion = new UtilsAsync.LatestAppVersion(context, false, updateFrom, gitHub, xmlOrJsonUrl, new LibraryListener() {
+        latestAppVersion = new UtilsAsync.LatestAppVersion(context, false, updateFrom, gitHub, xmlOrJsonUrl, customPackageName, new LibraryListener() {
             @Override
             public void onSuccess(Update update) {
                 if (context instanceof Activity && ((Activity) context).isFinishing()) {

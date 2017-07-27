@@ -105,21 +105,22 @@ class UtilsLibrary {
         return res;
     }
 
-    static URL getUpdateURL(Context context, UpdateFrom updateFrom, GitHub gitHub) {
+    static URL getUpdateURL(Context context, UpdateFrom updateFrom, GitHub gitHub, String customPackageName) {
         String res;
+        String packageName = (customPackageName == null) ? getAppPackageName(context) : customPackageName;
 
         switch (updateFrom) {
             default:
-                res = String.format(Config.PLAY_STORE_URL, getAppPackageName(context), Locale.getDefault().getLanguage());
+                res = String.format(Config.PLAY_STORE_URL, packageName, Locale.getDefault().getLanguage());
                 break;
             case GITHUB:
                 res = Config.GITHUB_URL + gitHub.getGitHubUser() + "/" + gitHub.getGitHubRepo() + "/releases";
                 break;
             case AMAZON:
-                res = Config.AMAZON_URL + getAppPackageName(context);
+                res = Config.AMAZON_URL + packageName;
                 break;
             case FDROID:
-                res = Config.FDROID_URL + getAppPackageName(context);
+                res = Config.FDROID_URL + packageName;
                 break;
         }
 
@@ -131,11 +132,11 @@ class UtilsLibrary {
 
     }
 
-    static Update getLatestAppVersionHttp(Context context, UpdateFrom updateFrom, GitHub gitHub) {
+    static Update getLatestAppVersionHttp(Context context, UpdateFrom updateFrom, GitHub gitHub, String customPackageName) {
         Boolean isAvailable = false;
         String source = "";
         OkHttpClient client = new OkHttpClient();
-        URL url = getUpdateURL(context, updateFrom, gitHub);
+        URL url = getUpdateURL(context, updateFrom, gitHub, customPackageName);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -194,7 +195,7 @@ class UtilsLibrary {
 
         final String version = getVersion(updateFrom, isAvailable, source);
         final String recentChanges = getRecentChanges(updateFrom, isAvailable, source);
-        final URL updateUrl = getUpdateURL(context, updateFrom, gitHub);
+        final URL updateUrl = getUpdateURL(context, updateFrom, gitHub, customPackageName);
 
         return new Update(version, recentChanges, updateUrl);
     }

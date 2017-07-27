@@ -67,6 +67,16 @@ public interface IAppUpdater {
     AppUpdater setUpdateJSON(@NonNull String jsonUrl);
 
     /**
+     * Set the package name of your application.<br>
+     * This could be useful if you use a different package name for different build variants.
+     *
+     * @param packageName name of application package
+     * @return this
+     */
+
+    AppUpdater setCustomPackageName(@NonNull String packageName);
+
+    /**
      * Set the times the app ascertains that a new update is available and display a dialog, Snackbar or notification. It makes the updates less invasive. Default: 1.
      *
      * @param times every X times

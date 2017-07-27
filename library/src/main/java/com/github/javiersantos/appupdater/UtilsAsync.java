@@ -19,15 +19,17 @@ class UtilsAsync {
         private UpdateFrom updateFrom;
         private GitHub gitHub;
         private String xmlOrJsonUrl;
+        private String customPackageName;
         private AppUpdater.LibraryListener listener;
 
-        public LatestAppVersion(Context context, Boolean fromUtils, UpdateFrom updateFrom, GitHub gitHub, String xmlOrJsonUrl, AppUpdater.LibraryListener listener) {
+        public LatestAppVersion(Context context, Boolean fromUtils, UpdateFrom updateFrom, GitHub gitHub, String xmlOrJsonUrl, String customPackageName, AppUpdater.LibraryListener listener) {
             this.contextRef = new WeakReference<>(context);
             this.libraryPreferences = new LibraryPreferences(context);
             this.fromUtils = fromUtils;
             this.updateFrom = updateFrom;
             this.gitHub = gitHub;
             this.xmlOrJsonUrl = xmlOrJsonUrl;
+            this.customPackageName = customPackageName;
             this.listener = listener;
         }
 
@@ -80,7 +82,7 @@ class UtilsAsync {
             } else {
                 Context context = contextRef.get();
                 if (context != null) {
-                    return UtilsLibrary.getLatestAppVersionHttp(context, updateFrom, gitHub);
+                    return UtilsLibrary.getLatestAppVersionHttp(context, updateFrom, gitHub, customPackageName);
                 } else {
                     cancel(true);
                     return null;

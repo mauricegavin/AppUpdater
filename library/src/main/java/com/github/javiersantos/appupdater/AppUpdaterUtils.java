@@ -15,6 +15,7 @@ public class AppUpdaterUtils {
     private UpdateFrom updateFrom;
     private GitHub gitHub;
     private String xmlOrJSONUrl;
+    private String customPackageName;
     private UtilsAsync.LatestAppVersion latestAppVersion;
 
     public interface UpdateListener {
@@ -97,6 +98,18 @@ public class AppUpdaterUtils {
         return this;
     }
 
+    /**
+     * Set the package name of your application.<br>
+     * This could be useful if you use a different package name for different build variants.
+     *
+     * @param packageName name of application package
+     * @return this
+     */
+    public AppUpdaterUtils setCustomPackageName(@NonNull String packageName) {
+        this.customPackageName = packageName;
+        return this;
+    }
+
 
     /**
      * Method to set the AppUpdaterListener for the AppUpdaterUtils actions
@@ -127,7 +140,7 @@ public class AppUpdaterUtils {
      * Execute AppUpdaterUtils in background.
      */
     public void start() {
-        latestAppVersion = new UtilsAsync.LatestAppVersion(context, true, updateFrom, gitHub, xmlOrJSONUrl, new AppUpdater.LibraryListener() {
+        latestAppVersion = new UtilsAsync.LatestAppVersion(context, true, updateFrom, gitHub, xmlOrJSONUrl, customPackageName, new AppUpdater.LibraryListener() {
             @Override
             public void onSuccess(Update update) {
                 Update installedUpdate = new Update(UtilsLibrary.getAppInstalledVersion(context), UtilsLibrary.getAppInstalledVersionCode(context));
